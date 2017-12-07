@@ -126,34 +126,42 @@ BigNumber factorialBruteForce(uint n){
 
 BigNumber factorialPrimeNumber(uint n) {
     vector<int> mp(n+1, 0);
-    vector<pair<int, int>> primes;
+    vector<pair<int, int>> primes; // pairs of prime and counts
     for (int i = 2; i <= n; i++) {
         if (mp[i] == 0) {
-            primes.push_back({i, 0});
             for (int j = i*2; j <= n; j += i)
                 mp[j] = 1;
+            uint j = n, cnt = 0;
+            while (j) {
+                j /= i;
+                cnt += j;
+            }
+            primes.push_back({i, cnt});
         }
     }
     int m = primes.size();
-    for (int i = 2; i <= n; i++) {
-        int val = i;
-        for (int j = 0; j < m && val != 1; ++j) {
-            while (val%primes[j].first == 0) {
-                primes[j].second++;
-                val /= primes[j].first;
-            }
-        }
-    }
     BigNumber ans(1);
-    for (auto& p:primes) 
-        ans *= power(p.first, p.second); 
-    return ans;
+    /* // Backward is more efficient than forward
+    for (int i = m-1; i >= 0; --i) 
+        ans *= power(primes[i].first, primes[i].second);
+    return ans;*/
+    vector<BigNumber> product;
+    for (int i = 0; i < m; ++i) product.push_back(power(primes[i].first, primes[i].second));
+    while (m > 1) {
+        for (int i = 0; i < m/2; ++i) {
+            product[i] *= product[m-1-i];
+            product.pop_back();
+        }
+        m = (m+1)/2;
+    } 
+    return product[0];
 }
 
 BigNumber factorialSplitRecursive(uint n){
-    BigNumber ans = power(2, nMinusSumofBits(n));
+    BigNumber ans(1);
     stack<uint> sk;
     // All ending numbers in the odd sequences
+    uint m = n;
     while (n > 2) {
         sk.push(n - 1 + (n&1));
         n >>= 1;
@@ -163,11 +171,12 @@ BigNumber factorialSplitRecursive(uint n){
     while (!sk.empty()) {
         uint k = sk.top();
         sk.pop();
-        for (; cur <= k; cur += 2)
-            oddSeq *= cur;
+        // Merge style product is more efficient than sequential
+        oddSeq *= partProduct(cur, k);
         ans *= oddSeq;
+        cur = k+2;
     }
-    return ans;
+    return ans*power(2, nMinusSumofBits(m));
 }
 
 // power of 2 in n!
@@ -178,4 +187,29 @@ int nMinusSumofBits(int n){
         m &= m-1;
     }
     return n;
+}
+
+BigNumber factorialSplitRecursiveTwo(uint n) {  
+    BigNumber p(1), r(1);
+    loop(n, p, r);
+    return r*power(2, nMinusSumofBits(n));
+}
+ 
+void loop(uint n, BigNumber& p, BigNumber& r) {
+    if (n <= 2) return;
+    loop(n/2, p, r);
+    p *= partProduct(n/2 + 1 + ((n/2)&1), n -1 + (n&1));
+    // Merge style product is more efficient than sequential
+    /*BigNumber tmp(1);
+    for (int i = n/2 + 1 + ((n/2)&1); i <= n -1 + (n&1); i += 2)
+        tmp *= i;
+    p *= tmp;*/
+    r *= p;
+}
+
+BigNumber partProduct(uint n, uint m) {
+    if (m == n) return BigNumber(n);
+    uint k = (n+m)>>1;
+    k = k -1 + (k&1);
+    return partProduct(n, k)*partProduct(k+2, m);
 }

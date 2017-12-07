@@ -22,16 +22,16 @@ int main() {
    cout << ans.toString() << '\n';
    cout << "Total run time: " << difftime(t2,t1) << "s\n";
    
-   // Comparing three algorithms
-   /*
-   vector<string> results(3);
-   vector<int> runtime(3);
+   /*// Comparing three algorithms
+   
+   vector<string> results(4);
+   vector<int> runtime(4);
    for (int i = 0; i < 3; i++) {
        time_t t1, t2;
        BigNumber ans;
        if (i == 0) {
           time(&t1);
-          ans = factorialBruteForce(n);
+          ans = factorialSplitRecursiveTwo(n);
           time(&t2);
        }
        else if (i == 1) {
@@ -39,9 +39,14 @@ int main() {
           ans = factorialPrimeNumber(n);
           time(&t2);
        }
-       else {
+       else if (i == 2) {
           time(&t1);
           ans = factorialSplitRecursive(n);
+          time(&t2);
+       }
+       else {
+          time(&t1);
+          ans = factorialBruteForce(n);
           time(&t2);
        }
        results[i] = ans.toString();
@@ -56,7 +61,7 @@ int main() {
    cout << results[0] << '\n';
    cout << "Passed Test\n";
    cout << "Total run time\n";
-   cout << "Brute Force: " << runtime[0] << "s\n";
+   cout << "Split Recursive Two: " << runtime[0] << "s\n";
    cout << "Prime Number: " << runtime[1] << "s\n";
    cout << "Split Recursive: " << runtime[2] << "s\n";  
    */

@@ -26,3 +26,7 @@ BigNumber factorialBruteForce (uint n);
 BigNumber factorialPrimeNumber (uint n);
 BigNumber factorialSplitRecursive (uint n);
 int nMinusSumofBits(int n);
+
+BigNumber factorialSplitRecursiveTwo(uint n);
+void loop(uint n, BigNumber& p, BigNumber& r); 
+BigNumber partProduct(uint n, uint m);
