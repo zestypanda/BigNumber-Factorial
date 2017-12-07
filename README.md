@@ -9,14 +9,10 @@ Three algorithms to calculate the factorial:
 
 Sequentially multiply all numbers;
 
-Runtime for n = 100,000: 
-
 2) Prime Number
 Convert the factorial to power of prime numbers;
 
 For example, 11! = 2^8 * 3^4 * 5^2 * 7^1 * 11^1;
-
-Run time for n = 100,000:
 
 3) Split recursive
 
@@ -32,4 +28,14 @@ For example,
 
 = (1*3*5*7*9*11) * (1*3*5) * (1*2) * 2^7
 
-Run time for n = 100,000:
+
+
+Run time
+
+n = 100,000; 200,000; 300,000 
+
+Brute Force:      35s     153s
+
+Prime Number:     28s     118s   279s
+
+Split Recursive:  19s     87s    209s
