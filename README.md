@@ -34,8 +34,8 @@ Run time
 
 n = 100,000; 200,000; 300,000 
 
-Brute Force:      35s     153s
+Brute Force:        35s       153s
 
-Prime Number:     28s     118s   279s
+Prime Number:     28s       118s     279s
 
-Split Recursive:  19s     87s    209s
+Split Recursive:  19s       87s      209s
