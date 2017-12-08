@@ -39,3 +39,17 @@ Brute Force:        35s       153s
 Prime Number:     16s       72s     177s
 
 Split Recursive:  14s       68s      165s   309s
+
+Optimization:
+
+1) using unsigned long rather than unsigned int
+
+2) Split Recursive: merge multiplication rather than sequential
+
+product(i, j) = product(i, (i+j)/2)* product((i+j)/2+1, j);
+
+3) Prime number: 
+
+backward sequential multiplication from small numbers; 
+
+multiply small numbers first, using priority queue;
