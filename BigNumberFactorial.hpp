@@ -12,6 +12,7 @@ public:
    BigNumber& operator+= (ulong rh);
    void print();
    std::string toString();
+   int size();
 private:
    // 9 digits saved in each element, from least significant bits
    // for example, n = 121212 003412341 123456789

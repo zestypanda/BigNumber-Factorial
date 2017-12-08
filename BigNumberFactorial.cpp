@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <stack>
+#include <queue>
 #include <utility>
 #include <string>
 #include <cmath>
@@ -62,6 +63,10 @@ string BigNumber::toString(){
         s += t;
     }
     return s;
+}
+
+inline int BigNumber::size() {
+    return num.size();
 }
 
 BigNumber operator*(const BigNumber& lh, const BigNumber& rh) {
@@ -141,21 +146,24 @@ BigNumber factorialPrimeNumber(uint n) {
     }
     int m = primes.size();
     BigNumber ans(1);
-    /* // Backward is more efficient than forward
-    for (int i = m-1; i >= 0; --i) 
-        ans *= power(primes[i].first, primes[i].second);
-    return ans;*/
     vector<BigNumber> product;
-    for (int i = 0; i < m; ++i) product.push_back(power(primes[i].first, primes[i].second));
-    while (m > 1) {
-        for (int i = 0; i < m/2; ++i) {
-            product[i] *= product[m-1-i];
-            product.pop_back();
-        }
-        m = (m+1)/2;
-    } 
-    return product[0];
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    for (int i = m-1; i >= 0; --i) {
+        product.push_back(move(power(primes[i].first, primes[i].second)));
+        pq.push({product[m-1-i].size(), m-1-i});
+    }
+    // optimization: multiply small numbers first, using priority queue
+    while (pq.size() > 1) {
+        int p1 = pq.top().second;
+        pq.pop();
+        int p2 = pq.top().second;
+        pq.pop();
+        product[p1] *= product[p2];
+        pq.push({product[p1].size(), p1});
+    }
+    return product[pq.top().second];
 }
+
 
 BigNumber factorialSplitRecursive(uint n){
     BigNumber ans(1);
